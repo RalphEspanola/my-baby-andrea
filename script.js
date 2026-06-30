@@ -166,21 +166,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Button teleports on tap/click only (no hover behavior).
   // After a set number of attempts, it vanishes completely.
-  const MAX_NO_ATTEMPTS = 7;
+  const MAX_NO_ATTEMPTS = 8;
   let noAttempts = 0;
-  let lastTouchTime = 0;
+  let noBtnLocked = false; // prevents a single physical tap from firing twice
 
   function handleNoInteraction(e) {
     e.preventDefault();
+    e.stopPropagation();
 
-    // Avoid double counting when touchstart and the resulting
-    // synthetic click both fire for a single tap on mobile.
-    if (e.type === "click" && Date.now() - lastTouchTime < 600) {
-      return;
-    }
-    if (e.type === "touchstart") {
-      lastTouchTime = Date.now();
-    }
+    // Hard guard: ignore any interaction that arrives while we're still
+    // processing the previous one (covers touchstart+click firing together,
+    // and any rapid repeat events from the same physical press).
+    if (noBtnLocked) return;
+    noBtnLocked = true;
+    setTimeout(() => {
+      noBtnLocked = false;
+    }, 350);
 
     noAttempts++;
 
@@ -202,11 +203,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-  // Touch devices: respond to tap
-  noBtn.addEventListener("touchstart", handleNoInteraction, { passive: false });
-
-  // Mouse devices: respond to click
-  noBtn.addEventListener("click", handleNoInteraction);
+  // Single unified event (pointerdown covers mouse, touch, and pen)
+  // so a tap/click is only ever counted once, on any device.
+  if (window.PointerEvent) {
+    noBtn.addEventListener("pointerdown", handleNoInteraction);
+  } else {
+    // Fallback for older browsers without Pointer Events support
+    noBtn.addEventListener("touchstart", handleNoInteraction, {
+      passive: false,
+    });
+    noBtn.addEventListener("click", handleNoInteraction);
+  }
 
   // Keep the button within bounds if the window is resized
   window.addEventListener("resize", () => {
