@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Button teleports on tap/click only (no hover behavior).
   // After a set number of attempts, it vanishes completely.
-  const MAX_NO_ATTEMPTS = 5;
+  const MAX_NO_ATTEMPTS = 7;
   let noAttempts = 0;
 
   function handleNoInteraction(e) {
