@@ -73,11 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "My favorite person 🌸",
     "My happiness ☀️",
     "My Dragon🤍",
-    "MY Super Duper Cute Crushieeeeeeeeeeee",
-    "I'm really sorry babyyy",
-    "Sorry sa akong pagka mali",
+    "I'm really sorry babyyy.",
+    "Sorry sa akong pagka mali.",
     "Forgive me pleaseeeeee..",
-    "I like you so so so so so much, Andrea ❤️",
+    "I like you so much, Andrea ❤️",
   ];
 
   const messageText = document.getElementById("messageText");
@@ -146,19 +145,36 @@ document.addEventListener("DOMContentLoaded", () => {
    * making sure it stays fully visible within the viewport.
    */
   function moveNoButtonRandomly() {
+    // Switch to fixed positioning before measuring, so the box size
+    // we read matches how the button will actually be rendered.
+    if (!noBtn.classList.contains("escaping")) {
+      noBtn.classList.add("escaping");
+
+      // IMPORTANT: any ancestor with a CSS `transform` (the entrance
+      // animation on .container, the card's hover/scale transforms, etc.)
+      // turns `position: fixed` into behaving like `position: absolute`
+      // relative to that ancestor instead of the real viewport. Moving
+      // the button directly under <body> guarantees it stays anchored
+      // to the actual screen no matter what its old parents are doing.
+      document.body.appendChild(noBtn);
+    }
+
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
 
-    const maxX = window.innerWidth - btnWidth - BTN_MARGIN;
-    const maxY = window.innerHeight - btnHeight - BTN_MARGIN;
+    // Use the visual viewport / document clientWidth-Height, which stays
+    // accurate even as mobile browser chrome (address bar, etc.) shows
+    // or hides and resizes window.innerHeight between taps.
+    const viewportWidth = document.documentElement.clientWidth;
+    const viewportHeight = window.visualViewport
+      ? window.visualViewport.height
+      : document.documentElement.clientHeight;
 
-    const randomX = Math.max(BTN_MARGIN, Math.random() * maxX);
-    const randomY = Math.max(BTN_MARGIN, Math.random() * maxY);
+    const maxX = Math.max(BTN_MARGIN, viewportWidth - btnWidth - BTN_MARGIN);
+    const maxY = Math.max(BTN_MARGIN, viewportHeight - btnHeight - BTN_MARGIN);
 
-    if (!noBtn.classList.contains("escaping")) {
-      // Switch to fixed positioning the first time it escapes
-      noBtn.classList.add("escaping");
-    }
+    const randomX = BTN_MARGIN + Math.random() * (maxX - BTN_MARGIN);
+    const randomY = BTN_MARGIN + Math.random() * (maxY - BTN_MARGIN);
 
     noBtn.style.left = randomX + "px";
     noBtn.style.top = randomY + "px";
