@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>I Like You, Andrea ❤️</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Floating hearts background container (filled dynamically by JS) -->
+    <div class="hearts-bg" id="heartsBg" aria-hidden="true"></div>
+
+    <!-- Confetti canvas overlay, only used after "Yes" is clicked -->
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+    <main class="container" id="container">
+      <!-- Title section -->
+      <header class="title-section">
+        <h1 class="main-title">
+          I Like You, Andrea <span class="heart-emoji">❤️</span>
+        </h1>
+        <p class="subtitle">"Para sayo to babyy....."</p>
+      </header>
+
+      <!-- Rotating heartfelt messages -->
+      <section class="message-stage" aria-live="polite">
+        <p class="message-text" id="messageText"></p>
+      </section>
+
+      <!-- Final apology card, hidden until messages finish -->
+      <section class="apology-card" id="apologyCard" aria-hidden="true">
+        <h2 class="card-question" id="cardQuestion">Can you forgive me?</h2>
+
+        <div class="button-row" id="buttonRow">
+          <button type="button" class="btn btn-yes" id="yesBtn">❤️ Yes</button>
+          <button type="button" class="btn btn-no" id="noBtn">💛 No</button>
+        </div>
+
+        <!-- Thank-you content, shown after Yes is pressed -->
+        <div class="thank-you" id="thankYou" hidden>
+          <p class="thank-you-main">Thank you BABYYYYY ❤️</p>
+          <p class="thank-you-sub">bati na tayo haaaaa 🥹💖</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
