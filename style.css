@@ -16,13 +16,14 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   overflow: hidden; /* No scrolling — everything fits one screen */
 }
 
 body {
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   background: linear-gradient(160deg, #fff5f8 0%, #ffe6f0 50%, #ffd6e7 100%);
   color: var(--text-dark);
   display: flex;
@@ -71,7 +72,8 @@ body {
     opacity: 0.25;
   }
   100% {
-    transform: translateY(-110vh) translateX(calc(var(--drift, 20px) * -1)) rotate(-10deg);
+    transform: translateY(-110vh) translateX(calc(var(--drift, 20px) * -1))
+      rotate(-10deg);
     opacity: 0;
   }
 }
@@ -140,8 +142,13 @@ body {
 }
 
 @keyframes gentleBeat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.18); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
 }
 
 .subtitle {
@@ -168,7 +175,9 @@ body {
   color: #c2447a;
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
 }
 
 .message-text.visible {
@@ -193,7 +202,10 @@ body {
   opacity: 0;
   transform: translateY(20px) scale(0.96);
   pointer-events: none;
-  transition: opacity 0.8s ease, transform 0.8s ease, max-width 0.6s ease;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease,
+    max-width 0.6s ease;
 }
 
 .apology-card.show {
@@ -207,9 +219,15 @@ body {
 }
 
 @keyframes cardPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-  100% { transform: scale(1.03); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1.03);
+  }
 }
 
 .card-question {
@@ -239,7 +257,10 @@ body {
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.3s ease;
   font-family: inherit;
 }
 
@@ -269,8 +290,20 @@ body {
 .btn-no.escaping {
   position: fixed;
   z-index: 10;
-  transition: top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-              left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-no.vanish {
+  transition:
+    top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  opacity: 0;
+  transform: scale(0.4) rotate(20deg);
+  pointer-events: none;
 }
 
 /* ===========================
@@ -283,10 +316,23 @@ body {
   animation: thankYouPop 0.8s ease;
 }
 
+.thank-you[hidden] {
+  display: none;
+}
+
 @keyframes thankYouPop {
-  0% { opacity: 0; transform: scale(0.85) translateY(10px); }
-  60% { opacity: 1; transform: scale(1.04) translateY(0); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(10px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.04) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .thank-you-main {
