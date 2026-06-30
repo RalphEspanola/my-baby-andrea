@@ -168,28 +168,29 @@ document.addEventListener("DOMContentLoaded", () => {
   // After a set number of attempts, it vanishes completely.
   const MAX_NO_ATTEMPTS = 8;
   let noAttempts = 0;
-  let noBtnLocked = false; // prevents a single physical tap from firing twice
 
-  function handleNoInteraction(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Hard guard: ignore any interaction that arrives while we're still
-    // processing the previous one (covers touchstart+click firing together,
-    // and any rapid repeat events from the same physical press).
-    if (noBtnLocked) return;
-    noBtnLocked = true;
-    setTimeout(() => {
-      noBtnLocked = false;
-    }, 350);
+  function handleNoInteraction() {
+    // Hard guard: the button is disabled the instant it's pressed and
+    // re-enabled shortly after, so a single physical tap/click can never
+    // be counted more than once, on any device or browser.
+    if (noBtn.disabled) return;
 
     noAttempts++;
+    console.log("No button pressed:", noAttempts, "/", MAX_NO_ATTEMPTS);
 
     if (noAttempts >= MAX_NO_ATTEMPTS) {
       vanishNoButton();
-    } else {
-      moveNoButtonRandomly();
+      return;
     }
+
+    noBtn.disabled = true;
+    moveNoButtonRandomly();
+
+    // Re-enable after the teleport animation finishes so the next
+    // tap/click can register.
+    setTimeout(() => {
+      noBtn.disabled = false;
+    }, 500);
   }
 
   /**
@@ -203,17 +204,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-  // Single unified event (pointerdown covers mouse, touch, and pen)
-  // so a tap/click is only ever counted once, on any device.
-  if (window.PointerEvent) {
-    noBtn.addEventListener("pointerdown", handleNoInteraction);
-  } else {
-    // Fallback for older browsers without Pointer Events support
-    noBtn.addEventListener("touchstart", handleNoInteraction, {
-      passive: false,
-    });
-    noBtn.addEventListener("click", handleNoInteraction);
-  }
+  // A standard "click" event fires for both mouse clicks and touch taps,
+  // so a single listener is enough — no need for separate touch handling.
+  noBtn.addEventListener("click", handleNoInteraction);
 
   // Keep the button within bounds if the window is resized
   window.addEventListener("resize", () => {

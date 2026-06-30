@@ -287,6 +287,12 @@ body {
   position: relative;
 }
 
+/* Keep normal appearance while briefly disabled between teleports */
+.btn-no:disabled {
+  opacity: 1;
+  cursor: pointer;
+}
+
 .btn-no.escaping {
   position: fixed;
   z-index: 10;
