@@ -168,21 +168,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // After a set number of attempts, it vanishes completely.
   const MAX_NO_ATTEMPTS = 7;
   let noAttempts = 0;
+  let lastTouchTime = 0;
 
   function handleNoInteraction(e) {
     e.preventDefault();
 
     // Avoid double counting when touchstart and the resulting
     // synthetic click both fire for a single tap on mobile.
-    if (
-      e.type === "click" &&
-      handleNoInteraction.lastTouchTime &&
-      Date.now() - handleNoInteraction.lastTouchTime < 600
-    ) {
+    if (e.type === "click" && Date.now() - lastTouchTime < 600) {
       return;
     }
     if (e.type === "touchstart") {
-      handleNoInteraction.lastTouchTime = Date.now();
+      lastTouchTime = Date.now();
     }
 
     noAttempts++;
