@@ -73,8 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "My favorite person 🌸",
     "My happiness ☀️",
     "My Dragon🤍",
-    "I'm really sorry babyyy",
-    "Sorry sa akong pagka mali",
+    "I'm really sorry babyyy.",
+    "Sorry sa akong pagka mali.",
     "Forgive me pleaseeeeee..",
     "I like you so much, Andrea ❤️",
   ];
@@ -163,38 +163,52 @@ document.addEventListener("DOMContentLoaded", () => {
     noBtn.style.top = randomY + "px";
   }
 
-  // Desktop: button flees when the cursor gets close to it
-  const PROXIMITY_THRESHOLD = 90; // px
+  // Button teleports on tap/click only (no hover behavior).
+  // After a set number of attempts, it vanishes completely.
+  const MAX_NO_ATTEMPTS = 5;
+  let noAttempts = 0;
 
-  document.addEventListener("mousemove", (e) => {
-    if (noBtn.classList.contains("hidden-final")) return;
+  function handleNoInteraction(e) {
+    e.preventDefault();
 
-    const rect = noBtn.getBoundingClientRect();
-    const btnCenterX = rect.left + rect.width / 2;
-    const btnCenterY = rect.top + rect.height / 2;
+    // Avoid double counting when touchstart and the resulting
+    // synthetic click both fire for a single tap on mobile.
+    if (
+      e.type === "click" &&
+      handleNoInteraction.lastTouchTime &&
+      Date.now() - handleNoInteraction.lastTouchTime < 600
+    ) {
+      return;
+    }
+    if (e.type === "touchstart") {
+      handleNoInteraction.lastTouchTime = Date.now();
+    }
 
-    const distance = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+    noAttempts++;
 
-    if (distance < PROXIMITY_THRESHOLD) {
+    if (noAttempts >= MAX_NO_ATTEMPTS) {
+      vanishNoButton();
+    } else {
       moveNoButtonRandomly();
     }
-  });
+  }
 
-  // Mobile / touch: button jumps away whenever tapped
-  noBtn.addEventListener(
-    "touchstart",
-    (e) => {
-      e.preventDefault();
-      moveNoButtonRandomly();
-    },
-    { passive: false },
-  );
+  /**
+   * Makes the "No" button fade out and disappear for good,
+   * leaving "Yes" as the only option.
+   */
+  function vanishNoButton() {
+    noBtn.classList.add("vanish");
+    setTimeout(() => {
+      noBtn.style.display = "none";
+    }, 500);
+  }
 
-  // Fallback: also dodge on click (covers edge cases / some mobile browsers)
-  noBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    moveNoButtonRandomly();
-  });
+  // Touch devices: respond to tap
+  noBtn.addEventListener("touchstart", handleNoInteraction, { passive: false });
+
+  // Mouse devices: respond to click
+  noBtn.addEventListener("click", handleNoInteraction);
 
   // Keep the button within bounds if the window is resized
   window.addEventListener("resize", () => {
