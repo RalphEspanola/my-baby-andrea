@@ -70,13 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "My baby ❤️",
     "My LOML 🥹",
     "My everything 💖",
-    "My favorite person 🌸",
-    "My happiness ☀️",
-    "My Dragon🤍",
-    "I'm really sorry babyyy.",
-    "Sorry sa akong pagka mali.",
+    "My favorite person",
+    "My happiness",
+    "My Dragon",
+    "MY Super Duper Cute Crushieeeeeeeeeeee",
+    "I'm really sorry babyyy",
+    "Sorry sa akong pagka mali",
     "Forgive me pleaseeeeee..",
-    "I like you so much, Andrea ❤️",
+    "I like you so so so so so much, Andrea ❤️",
   ];
 
   const messageText = document.getElementById("messageText");
